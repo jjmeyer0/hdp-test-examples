@@ -1,0 +1,2 @@
+create table if not exists hvac_building as select h.*, b.country, b.hvacproduct, b.buildingage, b.buildingmgr from building b join hvac_temperatures h on b.buildingid = h.buildingid;
+
