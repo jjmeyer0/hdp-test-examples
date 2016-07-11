@@ -14,3 +14,6 @@
 # Maven
 log/
 target/
+
+# PigUnit test data directory
+pig-cluster/

@@ -10,28 +10,37 @@ import org.junit.Test;
 
 
 public class BuildingAvgPigTest {
+    static final String BUILDING_SCHEMA = "(buildingid:int, buildingmgr:chararray, buildingage:double, hvacproduct:chararray, country:chararray)";
+    static final String CLUSTER_BUILDING_CSV = "pig-cluster/building.csv";
     static Cluster cluster;
-    String pigScript = "src/main/pig/building-avg-age.pig";
+
+    static final String AVG_AGE_SCRIPT = "src/main/pig/building-avg-age.pig";
     String[] args = new String[]{
-            "buildingPath=/building.csv",
-            "buildingAvgOut=."
+            "input=" + CLUSTER_BUILDING_CSV,
+            "output=output"
     };
 
     PigTest pigTest;
 
     @BeforeClass
-    public static void beforeClass() throws Exception {
+    public static void init() throws Exception {
         System.getProperties().setProperty("pigunit.exectype", Util.getLocalTestMode().toString());
         cluster = PigTest.getCluster();
-        cluster.copyFromLocalFile(
-                new Path("src/main/resources/data/sensor-files/building.csv"),
-                new Path("/building.csv")
-        );
+
+        cluster.update(
+                new Path("src/test/resources/data/test-building.csv"),
+                new Path(CLUSTER_BUILDING_CSV));
     }
 
     @Before
     public void setUp() throws Exception {
-        pigTest = new PigTest(pigScript, args);
+        cluster = PigTest.getCluster();
+        pigTest = new PigTest(AVG_AGE_SCRIPT, args);
+    }
+
+    @Test
+    public void makeSureTestDataFromFileProperlyProducesAverage() throws Exception {
+        pigTest.assertOutput("building_avg", new String[]{"(24.25)"});
     }
 
     @Test
@@ -44,8 +53,7 @@ public class BuildingAvgPigTest {
                 "5,m5,40,p5,c5"
         };
 
-        String[] buildingAverage = new String[]{"19"};
-
-        pigTest.assertOutput("building", building, "building_avg", buildingAverage);
+        pigTest.mockAlias("building", building, BUILDING_SCHEMA, ",");
+        pigTest.assertOutput("building_avg", new String[]{"(19.0)"});
     }
 }
