@@ -12,9 +12,10 @@ import org.junit.Test;
 public class BuildingAvgPigTest {
     static final String BUILDING_SCHEMA = "(buildingid:int, buildingmgr:chararray, buildingage:double, hvacproduct:chararray, country:chararray)";
     static final String CLUSTER_BUILDING_CSV = "pig-cluster/building.csv";
+    static final String AVG_AGE_SCRIPT = "src/main/pig/building-avg-age.pig";
+
     static Cluster cluster;
 
-    static final String AVG_AGE_SCRIPT = "src/main/pig/building-avg-age.pig";
     String[] args = new String[]{
             "input=" + CLUSTER_BUILDING_CSV,
             "output=output"
@@ -34,7 +35,6 @@ public class BuildingAvgPigTest {
 
     @Before
     public void setUp() throws Exception {
-        cluster = PigTest.getCluster();
         pigTest = new PigTest(AVG_AGE_SCRIPT, args);
     }
 

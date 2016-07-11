@@ -94,12 +94,12 @@
             <version>${mockito-all.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.scalatest</groupId>-->
-            <!--<artifactId>scalatest_2.11</artifactId>-->
-            <!--<version>${scalatest.version}</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <version>${scalatest.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>com.holdenkarau</groupId>-->
             <!--<artifactId>spark-testing-base_2.11</artifactId>-->
@@ -242,28 +242,7 @@
     </profiles>
 
     <build>
-        <!--<sourceDirectory>src/main/scala</sourceDirectory>-->
-        <!--<sourceDirectory>src/main/java</sourceDirectory>-->
-        <!--<testSourceDirectory>src/test/scala</testSourceDirectory>-->
-        <!--<testSourceDirectory>src/test/java</testSourceDirectory>-->
         <plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-shade-plugin</artifactId>-->
-                <!--<version>2.4.3</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>shade</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<configuration>-->
-                    <!--<finalName>uber-${project.artifactId}-${project.version}</finalName>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
-
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
