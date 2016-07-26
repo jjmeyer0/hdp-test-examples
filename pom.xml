@@ -17,6 +17,7 @@
         <mockito-all.version>1.10.19</mockito-all.version>
         <!-- TODO: The following will need to be different foreach profile. -->
         <scalatest.version>2.2.1</scalatest.version>
+        <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
         <spark-testing-base.version>1.6.1_0.3.3</spark-testing-base.version>
     </properties>
 
@@ -261,6 +262,19 @@
                         <arg>-target:jvm-1.8</arg>
                     </args>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <version>${scalatest-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

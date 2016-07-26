@@ -1,4 +1,4 @@
-package com.jj.pig
+package com.jj.scala.pig
 
 import org.apache.hadoop.fs.Path
 import org.apache.pig.pigunit.{Cluster, PigTest}
