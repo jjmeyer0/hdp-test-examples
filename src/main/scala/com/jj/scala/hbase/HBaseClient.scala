@@ -1,6 +1,7 @@
 package com.jj.scala.hbase
 
 import java.io.Closeable
+import java.security.PrivilegedExceptionAction
 
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client._
@@ -86,23 +87,19 @@ object TryWith {
 }
 
 object Main extends App {
+  // Setting up the HBase configuration
   private val configuration: Configuration = new Configuration()
   configuration.addResource("src/main/resources/hbase-site.xml")
-  //configuration.addResource("src/main/resources/core-site.xml")
-  //configuration.addResource("src/main/resources/hdfs-site.xml")
 
+  // Point to the krb5.conf file. Alternatively this could be setup when running the program using: -Djava.security.krb5.conf=<full path to krb5.conf>
   System.setProperty("java.security.krb5.conf", "src/main/resources/krb5.conf")
-  //System.setProperty("java.security.krb5.realm", "HORTONWORKS.LOCAL")
-  //System.setProperty("java.security.krb5.kdc", "c6401.ambari.apache.org")
-  //System.setProperty("sun.security.krb5.debug", "true")
 
+  // Setup configuration and login using specified keytab.
   UserGroupInformation.setConfiguration(configuration)
-  UserGroupInformation.loginUserFromKeytab("jj/c6401.ambari.apache.org@HORTONWORKS.LOCAL", "src/main/resources/jj.keytab")
+  val ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI("jj/c6401.ambari.apache.org@HORTONWORKS.LOCAL", "src/main/resources/jj.keytab")
 
   TryWith(new ConnectionGetter(configuration).connection) { c =>
-
     val client = new HBaseClient(c)
-    println(client.find("test", "test-1", "test-family", Seq("col1", "val1")))
     val entry = HBaseTableEntry(
       "test",
       "test-2",
@@ -114,5 +111,6 @@ object Main extends App {
       )
     )
     client.insert(entry)
+    println(client.find("test", "test-1", "test-family", Seq("col1", "val1")))
   }
 }
