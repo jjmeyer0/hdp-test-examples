@@ -51,6 +51,26 @@
     </property>
     
     <property>
+      <name>hadoop.proxyuser.HTTP.groups</name>
+      <value>users</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.HTTP.hosts</name>
+      <value>c6402.ambari.apache.org</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.knox.groups</name>
+      <value>users</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.knox.hosts</name>
+      <value>c6401.ambari.apache.org</value>
+    </property>
+    
+    <property>
       <name>hadoop.proxyuser.oozie.groups</name>
       <value>*</value>
     </property>
@@ -61,18 +81,45 @@
     </property>
     
     <property>
+      <name>hadoop.proxyuser.yarn.groups</name>
+      <value>*</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.yarn.hosts</name>
+      <value>c6402.ambari.apache.org</value>
+    </property>
+    
+    <property>
       <name>hadoop.security.auth_to_local</name>
-      <value>DEFAULT</value>
+      <value>RULE:[1:$1@$0](ambari-qa-testcluster@HORTONWORKS.LOCAL)s/.*/ambari-qa/
+RULE:[1:$1@$0](hbase-testcluster@HORTONWORKS.LOCAL)s/.*/hbase/
+RULE:[1:$1@$0](hdfs-testcluster@HORTONWORKS.LOCAL)s/.*/hdfs/
+RULE:[1:$1@$0](spark-testcluster@HORTONWORKS.LOCAL)s/.*/spark/
+RULE:[1:$1@$0](.*@HORTONWORKS.LOCAL)s/@.*//
+RULE:[2:$1@$0](amshbase@HORTONWORKS.LOCAL)s/.*/ams/
+RULE:[2:$1@$0](amszk@HORTONWORKS.LOCAL)s/.*/ams/
+RULE:[2:$1@$0](dn@HORTONWORKS.LOCAL)s/.*/hdfs/
+RULE:[2:$1@$0](hbase@HORTONWORKS.LOCAL)s/.*/hbase/
+RULE:[2:$1@$0](hive@HORTONWORKS.LOCAL)s/.*/hive/
+RULE:[2:$1@$0](jhs@HORTONWORKS.LOCAL)s/.*/mapred/
+RULE:[2:$1@$0](knox@HORTONWORKS.LOCAL)s/.*/knox/
+RULE:[2:$1@$0](nm@HORTONWORKS.LOCAL)s/.*/yarn/
+RULE:[2:$1@$0](nn@HORTONWORKS.LOCAL)s/.*/hdfs/
+RULE:[2:$1@$0](oozie@HORTONWORKS.LOCAL)s/.*/oozie/
+RULE:[2:$1@$0](rm@HORTONWORKS.LOCAL)s/.*/yarn/
+RULE:[2:$1@$0](yarn@HORTONWORKS.LOCAL)s/.*/yarn/
+DEFAULT</value>
     </property>
     
     <property>
       <name>hadoop.security.authentication</name>
-      <value>simple</value>
+      <value>kerberos</value>
     </property>
     
     <property>
       <name>hadoop.security.authorization</name>
-      <value>false</value>
+      <value>true</value>
     </property>
     
     <property>

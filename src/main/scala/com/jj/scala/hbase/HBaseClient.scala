@@ -7,6 +7,9 @@ import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.HBaseConfiguration
+import org.apache.hadoop.security.UserGroupInformation
+
+import scala.util.Properties
 
 case class HBaseTableEntry(tableName: String, rowKey: String, columnFamily: ColumnFamily)
 
@@ -84,14 +87,25 @@ object TryWith {
 
 object Main extends App {
   private val configuration: Configuration = new Configuration()
-  configuration.addResource("src/main/resources/hive-site.xml")
-  configuration.addResource("src/main/resources/core-site.xml")
+  configuration.addResource("src/main/resources/hbase-site.xml")
+  //configuration.addResource("src/main/resources/core-site.xml")
+  //configuration.addResource("src/main/resources/hdfs-site.xml")
+
+  System.setProperty("java.security.krb5.conf", "src/main/resources/krb5.conf")
+  //System.setProperty("java.security.krb5.realm", "HORTONWORKS.LOCAL")
+  //System.setProperty("java.security.krb5.kdc", "c6401.ambari.apache.org")
+  //System.setProperty("sun.security.krb5.debug", "true")
+
+  UserGroupInformation.setConfiguration(configuration)
+  UserGroupInformation.loginUserFromKeytab("jj/c6401.ambari.apache.org@HORTONWORKS.LOCAL", "src/main/resources/jj.keytab")
 
   TryWith(new ConnectionGetter(configuration).connection) { c =>
+
     val client = new HBaseClient(c)
+    println(client.find("test", "test-1", "test-family", Seq("col1", "val1")))
     val entry = HBaseTableEntry(
       "test",
-      "test-1",
+      "test-2",
       ColumnFamily(
         "test-family",
         Map(

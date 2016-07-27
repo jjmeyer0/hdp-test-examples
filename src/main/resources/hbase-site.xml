@@ -17,7 +17,7 @@
     
     <property>
       <name>hbase.client.retries.number</name>
-      <value>35</value>
+      <value>1</value>
     </property>
     
     <property>
@@ -32,12 +32,17 @@
     
     <property>
       <name>hbase.coprocessor.master.classes</name>
-      <value></value>
+      <value>org.apache.hadoop.hbase.security.access.AccessController</value>
     </property>
     
     <property>
       <name>hbase.coprocessor.region.classes</name>
-      <value>org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint</value>
+      <value>org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint</value>
+    </property>
+    
+    <property>
+      <name>hbase.coprocessor.regionserver.classes</name>
+      <value>org.apache.hadoop.hbase.security.access.AccessController</value>
     </property>
     
     <property>
@@ -106,6 +111,16 @@
     </property>
     
     <property>
+      <name>hbase.master.kerberos.principal</name>
+      <value>hbase/_HOST@HORTONWORKS.LOCAL</value>
+    </property>
+    
+    <property>
+      <name>hbase.master.keytab.file</name>
+      <value>/etc/security/keytabs/hbase.service.keytab</value>
+    </property>
+    
+    <property>
       <name>hbase.master.port</name>
       <value>16000</value>
     </property>
@@ -123,6 +138,16 @@
     <property>
       <name>hbase.regionserver.info.port</name>
       <value>16030</value>
+    </property>
+    
+    <property>
+      <name>hbase.regionserver.kerberos.principal</name>
+      <value>hbase/_HOST@HORTONWORKS.LOCAL</value>
+    </property>
+    
+    <property>
+      <name>hbase.regionserver.keytab.file</name>
+      <value>/etc/security/keytabs/hbase.service.keytab</value>
     </property>
     
     <property>
@@ -147,17 +172,17 @@
     
     <property>
       <name>hbase.rpc.timeout</name>
-      <value>90000</value>
+      <value>10000</value>
     </property>
     
     <property>
       <name>hbase.security.authentication</name>
-      <value>simple</value>
+      <value>kerberos</value>
     </property>
     
     <property>
       <name>hbase.security.authorization</name>
-      <value>false</value>
+      <value>true</value>
     </property>
     
     <property>
@@ -192,17 +217,17 @@
     
     <property>
       <name>phoenix.query.timeoutMs</name>
-      <value>60000</value>
+      <value>10000</value>
     </property>
     
     <property>
       <name>zookeeper.session.timeout</name>
-      <value>90000</value>
+      <value>10000</value>
     </property>
     
     <property>
       <name>zookeeper.znode.parent</name>
-      <value>/hbase-unsecure</value>
+      <value>/hbase-secure</value>
     </property>
     
   </configuration>
