@@ -136,8 +136,10 @@ Principal "admin/admin@EXAMPLE.COM" created.
 ### Creating Keytab
 
 ```
+kadmin
+addprinc jj@EXAMPLE.COM
 ktutil
-addent -password -p jj@EXAMPLE.COM -k 1 -e RC4-HMAC
+addent -password -p jj -k 1 -e RC4-HMAC
 wkt jj.keytab
 q
 ```

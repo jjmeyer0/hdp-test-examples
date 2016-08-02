@@ -89,7 +89,6 @@ object TryWith {
 object Main extends App {
   // Setting up the HBase configuration
   private val configuration: Configuration = new Configuration()
-  configuration.addResource("src/main/resources/core-site.xml")
   configuration.addResource("src/main/resources/hbase-site.xml")
 
   // Point to the krb5.conf file. Alternatively this could be setup when running the program using: -Djava.security.krb5.conf=<full path to krb5.conf>
