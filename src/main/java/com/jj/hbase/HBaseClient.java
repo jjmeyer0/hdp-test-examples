@@ -1,5 +1,7 @@
 package com.jj.hbase;
 
+import com.google.common.collect.Sets;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.Delete;
@@ -8,6 +10,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,5 +76,25 @@ public class HBaseClient {
 
             table.delete(delete);
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        // Setting up the HBase configuration
+        Configuration configuration = new Configuration();
+        configuration.addResource("src/main/resources/hbase-site.xml");
+
+        // Point to the krb5.conf file. Alternatively this could be setup when running the program using: -Djava.security.krb5.conf=<full path to krb5.conf>
+        System.setProperty("java.security.krb5.conf", "src/main/resources/krb5.conf");
+        System.setProperty("sun.security.krb5.debug", "true");
+
+        String principal = System.getProperty("kerberosPrincipal", "jj@EXAMPLE.COM");
+        String keytabLocation = System.getProperty("kerberosKeytab", "src/main/resources/jj.keytab");
+
+        UserGroupInformation.setConfiguration(configuration);
+        UserGroupInformation.loginUserFromKeytab(principal, keytabLocation);
+
+        HBaseClient client = new HBaseClient(new ConnectionGetter(configuration).getConnection());
+        client.insert("test", "test-java-1", new ColumnFamily("test-family").addColumn("col1", "val-java-1"));
+        System.out.println(client.find("test", "test-1", "test-family", Sets.newHashSet("col1")));
     }
 }

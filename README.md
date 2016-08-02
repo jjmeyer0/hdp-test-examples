@@ -76,9 +76,40 @@ rngd -r /dev/urandom -o /dev/random
 /usr/sbin/kdb5_util create -s
 ```
 
-2. Update /etc/krb5.conf
+2. Update '/etc/krb5.conf'. Example below.
 
 ```
+[libdefaults]
+  renew_lifetime = 7d
+  forwardable = true
+  default_realm = HORTONWORKS.LOCAL
+  ticket_lifetime = 24h
+  dns_lookup_realm = false
+  dns_lookup_kdc = false
+  #default_tgs_enctypes = aes des3-cbc-sha1 rc4 des-cbc-md5
+  #default_tkt_enctypes = aes des3-cbc-sha1 rc4 des-cbc-md5
+
+
+[domain_realm]
+
+  hortonworks.local = HORTONWORKS.LOCAL
+
+  .hortonworks.local = HORTONWORKS.LOCAL
+
+
+
+[logging]
+  default = FILE:/var/log/krb5kdc.log
+  admin_server = FILE:/var/log/kadmind.log
+  kdc = FILE:/var/log/krb5kdc.log
+
+[realms]
+  HORTONWORKS.LOCAL = {
+    admin_server = c6401.ambari.apache.org
+    kdc = c6401.ambari.apache.org
+  }
+
+
 ```
 
 3. Restart Services
@@ -88,9 +119,28 @@ rngd -r /dev/urandom -o /dev/random
 /etc/rc.d/init.d/kadmin restart
 ```
 
+4. Adding admin principal
+```
+sudo kadmin.local
+kadmin.local:  add_principal admin/admin@EXAMPLE.COM
+WARNING: no policy specified for admin/admin@EXAMPLE.COM; defaulting to no policy
+Enter password for principal "admin/admin@EXAMPLE.COM":
+Re-enter password for principal "admin/admin@EXAMPLE.COM":
+Principal "admin/admin@EXAMPLE.COM" created.
+```
+
 ### Enabling Kerberos in Ambari
 
-1.
+1. 
+
+### Creating Keytab
+
+```
+ktutil
+addent -password -p jj@EXAMPLE.COM -k 1 -e RC4-HMAC
+wkt jj.keytab
+q
+```
 
 ### Retrieving Necessary Files
 

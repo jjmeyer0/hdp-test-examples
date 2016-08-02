@@ -112,7 +112,7 @@
     
     <property>
       <name>hbase.master.kerberos.principal</name>
-      <value>hbase/_HOST@HORTONWORKS.LOCAL</value>
+      <value>hbase/_HOST@EXAMPLE.COM</value>
     </property>
     
     <property>
@@ -142,7 +142,7 @@
     
     <property>
       <name>hbase.regionserver.kerberos.principal</name>
-      <value>hbase/_HOST@HORTONWORKS.LOCAL</value>
+      <value>hbase/_HOST@EXAMPLE.COM</value>
     </property>
     
     <property>
@@ -202,7 +202,7 @@
     
     <property>
       <name>hbase.zookeeper.quorum</name>
-      <value>c6403.ambari.apache.org,c6402.ambari.apache.org,c6401.ambari.apache.org</value>
+      <value>c6401.ambari.apache.org</value>
     </property>
     
     <property>

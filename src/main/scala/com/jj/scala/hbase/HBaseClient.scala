@@ -89,20 +89,25 @@ object TryWith {
 object Main extends App {
   // Setting up the HBase configuration
   private val configuration: Configuration = new Configuration()
+  configuration.addResource("src/main/resources/core-site.xml")
   configuration.addResource("src/main/resources/hbase-site.xml")
 
   // Point to the krb5.conf file. Alternatively this could be setup when running the program using: -Djava.security.krb5.conf=<full path to krb5.conf>
-  System.setProperty("java.security.krb5.conf", "src/main/resources/krb5.conf")
+  Properties.setProp("java.security.krb5.conf", "src/main/resources/krb5.conf")
+  Properties.setProp("sun.security.krb5.debug", "true")
+
+  val principal = Properties.propOrElse("kerberosPrincipal", "jj@EXAMPLE.COM")
+  val keytabLocation = Properties.propOrElse("kerberosKeytab", "src/main/resources/jj.keytab")
 
   // Setup configuration and login using specified keytab.
   UserGroupInformation.setConfiguration(configuration)
-  val ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI("jj/c6401.ambari.apache.org@HORTONWORKS.LOCAL", "src/main/resources/jj.keytab")
+  UserGroupInformation.loginUserFromKeytab(principal, keytabLocation)
 
   TryWith(new ConnectionGetter(configuration).connection) { c =>
     val client = new HBaseClient(c)
     val entry = HBaseTableEntry(
       "test",
-      "test-2",
+      "test-1",
       ColumnFamily(
         "test-family",
         Map(
@@ -110,7 +115,9 @@ object Main extends App {
         )
       )
     )
+
     client.insert(entry)
-    println(client.find("test", "test-1", "test-family", Seq("col1", "val1")))
+    println(client.find("test", "test-1", "test-family", Seq("col1")))
+
   }
 }
